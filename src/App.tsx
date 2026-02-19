@@ -61,9 +61,10 @@ const translations = {
     decorDream: 'دکور رویا سپید',
     decorTeddy: 'دکور تدی‌های عاشق',
     adminLogin: 'ورود به پنل مدیریت',
+    adminUsername: 'نام کاربری',
     adminPassword: 'رمز عبور',
     adminEnter: 'ورود',
-    adminError: 'رمز عبور اشتباه است',
+    adminError: 'نام کاربری یا رمز عبور اشتباه است',
     adminCancel: 'انصراف',
   },
   en: {
@@ -101,9 +102,10 @@ const translations = {
     decorDream: 'White Dream Decor',
     decorTeddy: 'Lovely Teddy Decor',
     adminLogin: 'Admin Panel Login',
+    adminUsername: 'Username',
     adminPassword: 'Password',
     adminEnter: 'Login',
-    adminError: 'Incorrect password',
+    adminError: 'Incorrect username or password',
     adminCancel: 'Cancel',
   },
 };
@@ -123,6 +125,7 @@ function App() {
   // Admin panel
   const [showAdminPanel, setShowAdminPanel] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [loginUsername, setLoginUsername] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
   const [loginError, setLoginError] = useState('');
   const [loginLoading, setLoginLoading] = useState(false);
@@ -226,10 +229,11 @@ function App() {
   const handleAdminLogin = async () => {
     setLoginLoading(true);
     setLoginError('');
-    const ok = await adminLogin(loginPassword);
+    const ok = await adminLogin(loginUsername.trim(), loginPassword);
     setLoginLoading(false);
     if (ok) {
       setShowLoginModal(false);
+      setLoginUsername('');
       setLoginPassword('');
       setShowAdminPanel(true);
     } else {
@@ -257,28 +261,41 @@ function App() {
               </div>
               <h2 className="text-lg font-bold text-navy">{t.adminLogin}</h2>
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-600 mb-1.5">{t.adminPassword}</label>
-              <input
-                type="password"
-                value={loginPassword}
-                onChange={(e) => setLoginPassword(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleAdminLogin()}
-                className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-gold transition-all"
-                autoFocus
-              />
-              {loginError && <p className="text-red-500 text-xs mt-1.5">{loginError}</p>}
+            <div className="space-y-3">
+              <div>
+                <label className="block text-sm font-medium text-gray-600 mb-1.5">{t.adminUsername}</label>
+                <input
+                  type="text"
+                  value={loginUsername}
+                  onChange={(e) => setLoginUsername(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleAdminLogin()}
+                  className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-gold transition-all"
+                  autoFocus
+                  autoComplete="off"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-600 mb-1.5">{t.adminPassword}</label>
+                <input
+                  type="password"
+                  value={loginPassword}
+                  onChange={(e) => setLoginPassword(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleAdminLogin()}
+                  className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-gold transition-all"
+                />
+              </div>
+              {loginError && <p className="text-red-500 text-xs">{loginError}</p>}
             </div>
             <div className="flex gap-3">
               <Button
                 onClick={handleAdminLogin}
-                disabled={loginLoading || !loginPassword}
+                disabled={loginLoading || !loginUsername.trim() || !loginPassword}
                 className="flex-1 bg-navy text-white rounded-xl py-2.5 h-auto font-bold text-sm"
               >
                 {loginLoading ? '...' : t.adminEnter}
               </Button>
               <Button
-                onClick={() => { setShowLoginModal(false); setLoginPassword(''); setLoginError(''); }}
+                onClick={() => { setShowLoginModal(false); setLoginUsername(''); setLoginPassword(''); setLoginError(''); }}
                 variant="outline"
                 className="flex-1 rounded-xl py-2.5 h-auto text-sm"
               >

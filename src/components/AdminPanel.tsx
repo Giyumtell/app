@@ -4,7 +4,7 @@ import {
   Lock, Eye, EyeOff, X, Shield, RotateCcw, Camera,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { adminLogout, changeAdminPassword } from '@/lib/auth';
+import { adminLogout, changeAdminCredentials } from '@/lib/auth';
 import { saveContent, resetContent, type SiteContent, type GalleryImage, type BlogPost } from '@/lib/content';
 
 interface Props {
@@ -32,7 +32,9 @@ export function AdminPanel({ content, onContentChange, onClose }: Props) {
   const [saved, setSaved] = useState(false);
 
   // Security tab state
+  const [unameCurrent, setUnameCurrent] = useState('');
   const [pwCurrent, setPwCurrent] = useState('');
+  const [unameNew, setUnameNew] = useState('');
   const [pwNew, setPwNew] = useState('');
   const [pwConfirm, setPwConfirm] = useState('');
   const [pwError, setPwError] = useState('');
@@ -154,14 +156,16 @@ export function AdminPanel({ content, onContentChange, onClose }: Props) {
       setPwError('New passwords do not match.');
       return;
     }
-    const result = await changeAdminPassword(pwCurrent, pwNew);
+    const result = await changeAdminCredentials(unameCurrent, pwCurrent, unameNew.trim(), pwNew);
     if (result.ok) {
-      setPwSuccess('Password changed successfully.');
+      setPwSuccess('Credentials updated successfully.');
+      setUnameCurrent('');
       setPwCurrent('');
+      setUnameNew('');
       setPwNew('');
       setPwConfirm('');
     } else {
-      setPwError(result.error ?? 'Failed to change password.');
+      setPwError(result.error ?? 'Failed to update credentials.');
     }
   };
 
@@ -558,36 +562,75 @@ export function AdminPanel({ content, onContentChange, onClose }: Props) {
               <h2 className="text-lg font-bold text-navy">Security Settings</h2>
 
               <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm text-amber-800">
-                Default password is <code className="font-mono bg-amber-100 px-1 rounded">BaharFilm2024</code>. Change it after first login.
+                Default credentials — username: <code className="font-mono bg-amber-100 px-1 rounded">admin</code>, password: <code className="font-mono bg-amber-100 px-1 rounded">BaharFilm2024</code>. Change both after first login.
               </div>
 
               <div className="bg-white border border-gray-100 rounded-xl p-6 space-y-4">
-                <h3 className="font-medium text-navy">Change Password</h3>
+                <h3 className="font-medium text-navy">Update Credentials</h3>
+                <p className="text-xs text-gray-400">Only the hash of username+password is stored — neither is saved in plain text.</p>
 
-                {[
-                  { label: 'Current Password', val: pwCurrent, set: setPwCurrent },
-                  { label: 'New Password (min 8 chars)', val: pwNew, set: setPwNew },
-                  { label: 'Confirm New Password', val: pwConfirm, set: setPwConfirm },
-                ].map(({ label: lbl, val, set }) => (
-                  <div key={lbl}>
-                    <label className={label}>{lbl}</label>
+                {/* Current credentials */}
+                <div className="space-y-3 pb-4 border-b border-gray-100">
+                  <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Current</p>
+                  <div>
+                    <label className={label}>Username</label>
+                    <input
+                      type="text"
+                      className={inp}
+                      value={unameCurrent}
+                      onChange={(e) => setUnameCurrent(e.target.value)}
+                      autoComplete="off"
+                    />
+                  </div>
+                  <div>
+                    <label className={label}>Password</label>
                     <div className="relative">
                       <input
                         type={showPw ? 'text' : 'password'}
                         className={inp + ' pr-10'}
-                        value={val}
-                        onChange={(e) => set(e.target.value)}
+                        value={pwCurrent}
+                        onChange={(e) => setPwCurrent(e.target.value)}
                       />
-                      <button
-                        type="button"
-                        onClick={() => setShowPw((s) => !s)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                      >
+                      <button type="button" onClick={() => setShowPw((s) => !s)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
                         {showPw ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                       </button>
                     </div>
                   </div>
-                ))}
+                </div>
+
+                {/* New credentials */}
+                <div className="space-y-3">
+                  <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">New</p>
+                  <div>
+                    <label className={label}>New Username</label>
+                    <input
+                      type="text"
+                      className={inp}
+                      value={unameNew}
+                      onChange={(e) => setUnameNew(e.target.value)}
+                      autoComplete="off"
+                    />
+                  </div>
+                  <div>
+                    <label className={label}>New Password (min 8 chars)</label>
+                    <input
+                      type={showPw ? 'text' : 'password'}
+                      className={inp}
+                      value={pwNew}
+                      onChange={(e) => setPwNew(e.target.value)}
+                    />
+                  </div>
+                  <div>
+                    <label className={label}>Confirm New Password</label>
+                    <input
+                      type={showPw ? 'text' : 'password'}
+                      className={inp}
+                      value={pwConfirm}
+                      onChange={(e) => setPwConfirm(e.target.value)}
+                    />
+                  </div>
+                </div>
 
                 {pwError && <p className="text-sm text-red-500">{pwError}</p>}
                 {pwSuccess && <p className="text-sm text-green-600">{pwSuccess}</p>}
@@ -597,7 +640,7 @@ export function AdminPanel({ content, onContentChange, onClose }: Props) {
                   className="bg-navy text-white rounded-xl px-6 py-2.5 h-auto text-sm w-full"
                 >
                   <Lock className="w-4 h-4 mr-1.5" />
-                  Update Password
+                  Update Credentials
                 </Button>
               </div>
 
