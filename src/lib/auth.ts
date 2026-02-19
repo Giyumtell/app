@@ -17,13 +17,38 @@ async function sha256(text: string): Promise<string> {
     .join('');
 }
 
-function getStoredHash(): string {
+// Cache the result so we only fetch once per page load.
+let _serverHash: string | null = null;
+let _serverHashLoaded = false;
+
+async function loadServerHash(): Promise<string | null> {
+  if (_serverHashLoaded) return _serverHash;
+  try {
+    const res = await fetch('/appsettings.json', { cache: 'no-store' });
+    if (res.ok) {
+      const data = await res.json() as { credentialHash?: string };
+      _serverHash = data.credentialHash?.trim() || null;
+    }
+  } catch {
+    // Server file not available — fall through to local fallbacks.
+  }
+  _serverHashLoaded = true;
+  return _serverHash;
+}
+
+/** Priority: appsettings.json (server) → localStorage (UI-changed) → hardcoded default */
+async function getActiveHash(): Promise<string> {
+  const server = await loadServerHash();
+  if (server) return server;
   return localStorage.getItem(CREDENTIAL_HASH_KEY) ?? DEFAULT_CREDENTIAL_HASH;
 }
 
 export async function adminLogin(username: string, password: string): Promise<boolean> {
-  const hash = await sha256(username + password);
-  if (hash !== getStoredHash()) return false;
+  const [hash, active] = await Promise.all([
+    sha256(username + password),
+    getActiveHash(),
+  ]);
+  if (hash !== active) return false;
 
   const session = { expires: Date.now() + SESSION_DURATION_MS };
   sessionStorage.setItem(SESSION_KEY, JSON.stringify(session));
@@ -59,7 +84,7 @@ export async function changeAdminCredentials(
     return { ok: false, error: 'New password must be at least 8 characters.' };
   }
   const currentHash = await sha256(currentUsername + currentPassword);
-  if (currentHash !== getStoredHash()) {
+  if (currentHash !== (await getActiveHash())) {
     return { ok: false, error: 'Current username or password is incorrect.' };
   }
   localStorage.setItem(CREDENTIAL_HASH_KEY, await sha256(newUsername + newPassword));
