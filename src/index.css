@@ -27,18 +27,7 @@
     --ring: 240 5.9% 10%;
     --radius: 0.625rem;
     
-    /* Custom Studio Colors — default (navy/gold) theme */
-    --gold: 43 35% 72%;
-    --gold-dark: 38 35% 58%;
-    --gold-light: 43 35% 88%;
-    --navy: 240 33% 14%;
-    --teal: 168 55% 40%;
-    --cream: 40 33% 95%;
-    --sand: 38 30% 85%;
-  }
-
-  /* ── Pink Rose theme ─────────────────────────────────────────────── */
-  .theme-pink {
+    /* Pink Rose Studio colours */
     --gold: 340 38% 68%;
     --gold-dark: 340 42% 50%;
     --gold-light: 340 40% 91%;
@@ -46,17 +35,6 @@
     --teal: 320 40% 50%;
     --cream: 340 35% 96%;
     --sand: 340 30% 88%;
-  }
-
-  /* ── Purple Bloom theme ──────────────────────────────────────────── */
-  .theme-purple {
-    --gold: 280 30% 70%;
-    --gold-dark: 280 36% 54%;
-    --gold-light: 280 30% 91%;
-    --navy: 265 52% 18%;
-    --teal: 260 40% 55%;
-    --cream: 275 30% 96%;
-    --sand: 275 25% 87%;
   }
 }
 
