@@ -217,7 +217,7 @@ export function AdminPanel({ content, onContentChange, onClose }: Props) {
       <div className="bg-navy text-white px-6 py-4 flex items-center justify-between flex-shrink-0">
         <div className="flex items-center gap-3">
           <Shield className="w-5 h-5 text-gold" />
-          <span className="font-bold text-base">BaharFilm Admin Panel</span>
+          <span className="font-bold text-base">Pink Rose Studio — Admin Panel</span>
         </div>
         <div className="flex items-center gap-3">
           <Button
@@ -600,7 +600,7 @@ export function AdminPanel({ content, onContentChange, onClose }: Props) {
               <h2 className="text-lg font-bold text-navy">Security Settings</h2>
 
               <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm text-amber-800">
-                Default credentials — username: <code className="font-mono bg-amber-100 px-1 rounded">admin</code>, password: <code className="font-mono bg-amber-100 px-1 rounded">BaharFilm2024</code>. Change both after first login.
+                Default credentials — username: <code className="font-mono bg-amber-100 px-1 rounded">admin</code>, password: <code className="font-mono bg-amber-100 px-1 rounded">PinkRoseStudio2024</code>. Change both after first login.
               </div>
 
               <div className="bg-white border border-gray-100 rounded-xl p-6 space-y-4">

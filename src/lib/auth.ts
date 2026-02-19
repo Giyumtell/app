@@ -1,10 +1,10 @@
 // Stored hash is SHA-256 of (username + password) concatenated.
 // Neither the username nor the password is ever stored — only the hash.
-// Default credentials: username "admin", password "BaharFilm2024"
-const DEFAULT_CREDENTIAL_HASH = '40e366c4298ac84366c925c79e694f400d49f5ab21ec2217b9b6aac7e846291d';
+// Default credentials: username "admin", password "PinkRoseStudio2024"
+const DEFAULT_CREDENTIAL_HASH = '0b1d7f1ada59aeaecbc1ad393fdfdf67bb840168d16fdce6d546db25c5b4f551';
 
-const CREDENTIAL_HASH_KEY = 'baharfilm_cred_hash';
-const SESSION_KEY = 'baharfilm_admin_session';
+const CREDENTIAL_HASH_KEY = 'pinkrose_cred_hash';
+const SESSION_KEY = 'pinkrose_admin_session';
 const SESSION_DURATION_MS = 2 * 60 * 60 * 1000; // 2 hours
 
 async function sha256(text: string): Promise<string> {
