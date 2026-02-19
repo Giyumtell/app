@@ -508,7 +508,7 @@ export function AdminPanel({ content, onContentChange, onClose }: Props) {
 
               {[
                 { key: 'whatsapp', label: 'WhatsApp Number (digits only, with country code)', placeholder: '989301234567' },
-                { key: 'email', label: 'Email', placeholder: 'info@baharfilmstudio.com' },
+                { key: 'email', label: 'Email', placeholder: 'info@pinkrosestudio.com' },
                 { key: 'instagram', label: 'Instagram URL', placeholder: 'https://instagram.com/...' },
                 { key: 'telegram', label: 'Telegram URL', placeholder: 'https://t.me/...' },
               ].map(({ key, label: lbl, placeholder }) => (
