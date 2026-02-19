@@ -7,17 +7,13 @@ import { Button } from '@/components/ui/button';
 import { adminLogout, changeAdminCredentials, isAdminAuthenticated } from '@/lib/auth';
 import { saveContent, resetContent, type SiteContent, type GalleryImage, type BlogPost } from '@/lib/content';
 
-type Theme = 'default' | 'pink' | 'purple';
-
 interface Props {
   content: SiteContent;
   onContentChange: (next: SiteContent) => void;
   onClose: () => void;
-  theme: Theme;
-  onThemeChange: (t: Theme) => void;
 }
 
-type Tab = 'hero' | 'gallery' | 'blog' | 'contact' | 'about' | 'security' | 'theme';
+type Tab = 'hero' | 'gallery' | 'blog' | 'contact' | 'about' | 'security';
 
 const TABS: { id: Tab; label: string; icon: React.ReactNode }[] = [
   { id: 'hero', label: 'Hero', icon: <Camera className="w-4 h-4" /> },
@@ -25,13 +21,12 @@ const TABS: { id: Tab; label: string; icon: React.ReactNode }[] = [
   { id: 'blog', label: 'Blog', icon: <FileText className="w-4 h-4" /> },
   { id: 'contact', label: 'Contact', icon: <Phone className="w-4 h-4" /> },
   { id: 'about', label: 'About', icon: <Info className="w-4 h-4" /> },
-  { id: 'theme', label: 'Theme', icon: <span className="w-4 h-4 text-base leading-none">🎨</span> },
   { id: 'security', label: 'Security', icon: <Lock className="w-4 h-4" /> },
 ];
 
 type GalleryCategory = 'pregnancy' | 'newborn' | 'child' | 'family';
 
-export function AdminPanel({ content, onContentChange, onClose, theme, onThemeChange }: Props) {
+export function AdminPanel({ content, onContentChange, onClose }: Props) {
   const [tab, setTab] = useState<Tab>('hero');
   const [draft, setDraft] = useState<SiteContent>(structuredClone(content));
   const [saved, setSaved] = useState(false);
@@ -595,74 +590,6 @@ export function AdminPanel({ content, onContentChange, onClose, theme, onThemeCh
                     setDraft((d) => ({ ...d, about: { ...d.about, textEn: e.target.value } }))
                   }
                 />
-              </div>
-            </div>
-          )}
-
-          {/* THEME TAB */}
-          {tab === 'theme' && (
-            <div className="max-w-md space-y-6">
-              <h2 className="text-lg font-bold text-navy">Theme</h2>
-              <p className="text-sm text-gray-500">Choose the colour palette for the whole website. The selection is saved automatically.</p>
-
-              <div className="grid grid-cols-1 gap-4">
-                {([
-                  {
-                    key: 'default' as Theme,
-                    label: 'Default — Navy & Gold',
-                    description: 'Deep navy with warm gold accents',
-                    navy: '#1A1A2E',
-                    gold: '#D4C4A0',
-                    cream: '#F5F0E6',
-                  },
-                  {
-                    key: 'pink' as Theme,
-                    label: 'Pink Rose',
-                    description: 'Deep wine/rose with dusty pink accents',
-                    navy: '#4A1535',
-                    gold: '#CF9AAE',
-                    cream: '#FBF2F6',
-                  },
-                  {
-                    key: 'purple' as Theme,
-                    label: 'Purple Bloom',
-                    description: 'Deep purple with soft lavender accents',
-                    navy: '#1F0F40',
-                    gold: '#C4A0D4',
-                    cream: '#F6F2FC',
-                  },
-                ]).map(({ key, label, description, navy, gold, cream }) => (
-                  <button
-                    key={key}
-                    onClick={() => onThemeChange(key)}
-                    className={`w-full text-left rounded-2xl border-2 p-4 transition-all ${
-                      theme === key
-                        ? 'border-navy shadow-md'
-                        : 'border-gray-100 hover:border-gray-300'
-                    }`}
-                  >
-                    <div className="flex items-center gap-4">
-                      {/* Colour preview swatches */}
-                      <div className="flex gap-1.5 shrink-0">
-                        <span className="w-7 h-7 rounded-full border border-white shadow-sm" style={{ backgroundColor: navy }} />
-                        <span className="w-7 h-7 rounded-full border border-white shadow-sm" style={{ backgroundColor: gold }} />
-                        <span className="w-7 h-7 rounded-full border border-gray-200 shadow-sm" style={{ backgroundColor: cream }} />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="font-semibold text-sm text-gray-800">{label}</p>
-                        <p className="text-xs text-gray-500 mt-0.5">{description}</p>
-                      </div>
-                      {/* Active indicator */}
-                      {theme === key && (
-                        <span className="w-5 h-5 rounded-full bg-navy flex items-center justify-center shrink-0">
-                          <svg className="w-3 h-3 text-gold fill-current" viewBox="0 0 12 12">
-                            <path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
-                          </svg>
-                        </span>
-                      )}
-                    </div>
-                  </button>
-                ))}
               </div>
             </div>
           )}

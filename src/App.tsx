@@ -112,18 +112,12 @@ const translations = {
 
 // ─── App ──────────────────────────────────────────────────────────────────────
 
-type Theme = 'default' | 'pink' | 'purple';
-
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState<'pregnancy' | 'newborn' | 'child' | 'family'>('pregnancy');
   const [isScrolled, setIsScrolled] = useState(false);
   const [lang, setLang] = useState<'fa' | 'en'>('fa');
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [theme, setTheme] = useState<Theme>(
-    () => (localStorage.getItem('studio_theme') as Theme | null) ?? 'default'
-  );
-
   // Content store
   const [content, setContent] = useState<SiteContent>(() => loadContent());
 
@@ -157,10 +151,6 @@ function App() {
     document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
     document.documentElement.lang = lang;
   }, [isRTL, lang]);
-
-  useEffect(() => {
-    localStorage.setItem('studio_theme', theme);
-  }, [theme]);
 
   // Reset slideshow index when category changes
   useEffect(() => {
@@ -258,7 +248,7 @@ function App() {
   const currentImage = getCategoryImages()[currentImageIndex];
 
   return (
-    <div className={`min-h-screen bg-white font-vazirmatn ${isRTL ? '' : 'font-sans'} ${theme !== 'default' ? `theme-${theme}` : ''}`} dir={isRTL ? 'rtl' : 'ltr'}>
+    <div className={`min-h-screen bg-white font-vazirmatn ${isRTL ? '' : 'font-sans'}`} dir={isRTL ? 'rtl' : 'ltr'}>
 
       {/* ── Admin Login Modal ────────────────────────────────────────────── */}
       {showLoginModal && (
@@ -321,8 +311,6 @@ function App() {
           content={content}
           onContentChange={setContent}
           onClose={handleAdminClose}
-          theme={theme}
-          onThemeChange={setTheme}
         />
       )}
 
