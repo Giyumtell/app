@@ -321,6 +321,8 @@ function App() {
           content={content}
           onContentChange={setContent}
           onClose={handleAdminClose}
+          theme={theme}
+          onThemeChange={setTheme}
         />
       )}
 
@@ -359,27 +361,6 @@ function App() {
 
             {/* Right controls */}
             <div className="flex items-center gap-3">
-              {/* Theme switcher */}
-              <div className="hidden sm:flex items-center gap-1.5 px-2 py-1.5 bg-gray-100 rounded-xl" title="Choose theme">
-                {([
-                  { key: 'default' as Theme, bg: '#1A1A2E', ring: '#D4C4A0', label: lang === 'fa' ? 'تم پیش‌فرض' : 'Default' },
-                  { key: 'pink'    as Theme, bg: '#4A1535', ring: '#CF9AAE', label: lang === 'fa' ? 'رز صورتی' : 'Pink Rose' },
-                  { key: 'purple'  as Theme, bg: '#1F0F40', ring: '#C4A0D4', label: lang === 'fa' ? 'بنفش' : 'Purple Bloom' },
-                ]).map(({ key, bg, ring, label }) => (
-                  <button
-                    key={key}
-                    title={label}
-                    onClick={() => setTheme(key)}
-                    className="relative w-5 h-5 rounded-full transition-transform hover:scale-110 focus:outline-none"
-                    style={{
-                      backgroundColor: bg,
-                      boxShadow: theme === key ? `0 0 0 2px white, 0 0 0 4px ${ring}` : undefined,
-                    }}
-                    aria-label={label}
-                  />
-                ))}
-              </div>
-
               <button
                 onClick={() => setLang(lang === 'fa' ? 'en' : 'fa')}
                 className="flex items-center gap-2 px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors"
