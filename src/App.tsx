@@ -519,7 +519,7 @@ function App() {
                   </div>
                   <h3 className="text-white font-bold text-lg md:text-xl">{getCategoryTitle()}</h3>
                 </div>
-                <span className="text-gray-400 text-sm">
+                <span className="text-gray-400 text-sm" dir="ltr">
                   {currentImageIndex + 1} / {getCategoryImages().length}
                 </span>
               </div>
