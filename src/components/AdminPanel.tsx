@@ -4,7 +4,7 @@ import {
   Lock, Eye, EyeOff, X, Shield, RotateCcw, Camera,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { adminLogout, changeAdminCredentials } from '@/lib/auth';
+import { adminLogout, changeAdminCredentials, isAdminAuthenticated } from '@/lib/auth';
 import { saveContent, resetContent, type SiteContent, type GalleryImage, type BlogPost } from '@/lib/content';
 
 interface Props {
@@ -53,7 +53,25 @@ export function AdminPanel({ content, onContentChange, onClose }: Props) {
     setDraft(structuredClone(content));
   }, [content]);
 
+  // Kick the admin out if the session expires while the panel is open
+  useEffect(() => {
+    const check = () => {
+      if (!isAdminAuthenticated()) {
+        adminLogout();
+        onClose();
+      }
+    };
+    const interval = setInterval(check, 30_000); // every 30 s
+    return () => clearInterval(interval);
+  }, [onClose]);
+
   const save = () => {
+    // Re-verify the session before every write
+    if (!isAdminAuthenticated()) {
+      adminLogout();
+      onClose();
+      return;
+    }
     saveContent(draft);
     onContentChange(draft);
     setSaved(true);
@@ -172,6 +190,26 @@ export function AdminPanel({ content, onContentChange, onClose }: Props) {
   // Shared input style
   const inp = 'w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-gold focus:border-transparent transition-all';
   const label = 'block text-xs font-medium text-gray-600 mb-1';
+
+  // Hard render-guard: if the session is invalid for any reason, show a
+  // locked screen instead of the panel content. This fires even if someone
+  // forces `showAdminPanel = true` via browser DevTools.
+  if (!isAdminAuthenticated()) {
+    return (
+      <div className="fixed inset-0 z-50 bg-navy flex items-center justify-center">
+        <div className="text-center space-y-4">
+          <Lock className="w-12 h-12 text-gold mx-auto" />
+          <p className="text-white font-bold text-lg">Session expired or unauthorised</p>
+          <button
+            onClick={() => { adminLogout(); onClose(); }}
+            className="bg-gold text-navy px-6 py-2.5 rounded-xl font-bold text-sm hover:bg-gold-dark transition-colors"
+          >
+            Back to site
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="fixed inset-0 z-50 bg-gray-50 flex flex-col overflow-hidden">
