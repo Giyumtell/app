@@ -28,7 +28,7 @@ interface NavItem {
 const translations = {
   fa: {
     welcome: 'به استودیو',
-    studioName: 'بهارفیلم',
+    studioName: 'آتلیه رز صورتی',
     welcomeSuffix: 'خوش آمدید',
     subtitle: 'استودیو عکاسی نوزاد، کودک، بارداری و خانوادگی. همه چیز درمورد گرفتن تعدادی عکس نیست، هدف ما جشن گرفتن به افتخار زندگی است.',
     getConsultation: 'دریافت مشاوره',
@@ -54,7 +54,7 @@ const translations = {
     locations: 'شعبه‌ها',
     iran: 'ایران (تهران)',
     uae: 'امارات متحده عربی (دبی)',
-    copyright: '© ۱۴۰۴ تمامی حقوق برای استودیو بهارفیلم محفوظ می‌باشد.',
+    copyright: '© ۱۴۰۴ تمامی حقوق برای آتلیه رز صورتی محفوظ می‌باشد.',
     responseHours: 'پاسخگوی شما عزیزان ۱۰ الی ۱۸',
     decorSpring: 'دکور نوروز',
     decorBunny: 'دکور خانه خرگوشی',
@@ -69,7 +69,7 @@ const translations = {
   },
   en: {
     welcome: 'Welcome to',
-    studioName: 'BaharFilm',
+    studioName: 'Pink Rose Studio',
     welcomeSuffix: 'Studio',
     subtitle: "Newborn, Child, Pregnancy & Family Photography Studio. It's not just about taking photos, our goal is to celebrate life.",
     getConsultation: 'Get Consultation',
@@ -95,7 +95,7 @@ const translations = {
     locations: 'Locations',
     iran: 'Iran (Tehran)',
     uae: 'United Arab Emirates (Dubai)',
-    copyright: '© 2025 All rights reserved for BaharFilm Studio.',
+    copyright: '© 2025 All rights reserved for Pink Rose Studio.',
     responseHours: 'Available for you 10 AM - 6 PM',
     decorSpring: 'Nowruz Decor',
     decorBunny: 'Bunny House Decor',
@@ -112,12 +112,17 @@ const translations = {
 
 // ─── App ──────────────────────────────────────────────────────────────────────
 
+type Theme = 'default' | 'pink' | 'purple';
+
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState<'pregnancy' | 'newborn' | 'child' | 'family'>('pregnancy');
   const [isScrolled, setIsScrolled] = useState(false);
   const [lang, setLang] = useState<'fa' | 'en'>('fa');
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [theme, setTheme] = useState<Theme>(
+    () => (localStorage.getItem('studio_theme') as Theme | null) ?? 'default'
+  );
 
   // Content store
   const [content, setContent] = useState<SiteContent>(() => loadContent());
@@ -152,6 +157,10 @@ function App() {
     document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
     document.documentElement.lang = lang;
   }, [isRTL, lang]);
+
+  useEffect(() => {
+    localStorage.setItem('studio_theme', theme);
+  }, [theme]);
 
   // Reset slideshow index when category changes
   useEffect(() => {
@@ -249,7 +258,7 @@ function App() {
   const currentImage = getCategoryImages()[currentImageIndex];
 
   return (
-    <div className={`min-h-screen bg-white font-vazirmatn ${isRTL ? '' : 'font-sans'}`} dir={isRTL ? 'rtl' : 'ltr'}>
+    <div className={`min-h-screen bg-white font-vazirmatn ${isRTL ? '' : 'font-sans'} ${theme !== 'default' ? `theme-${theme}` : ''}`} dir={isRTL ? 'rtl' : 'ltr'}>
 
       {/* ── Admin Login Modal ────────────────────────────────────────────── */}
       {showLoginModal && (
@@ -330,9 +339,9 @@ function App() {
                 </div>
               </div>
               <div className="flex flex-col text-left">
-                <span className="text-xl font-bold text-navy leading-tight">BaharFilm</span>
+                <span className="text-xl font-bold text-navy leading-tight">{lang === 'fa' ? 'آتلیه رز صورتی' : 'Pink Rose Studio'}</span>
                 <span className="text-xs text-gold-dark font-medium">
-                  {lang === 'fa' ? 'استودیو بهارفیلم' : 'Pregnancy & Newborn Studio'}
+                  {lang === 'fa' ? 'استودیو تخصصی عکاسی' : 'Pregnancy & Newborn Studio'}
                 </span>
               </div>
             </button>
@@ -350,6 +359,27 @@ function App() {
 
             {/* Right controls */}
             <div className="flex items-center gap-3">
+              {/* Theme switcher */}
+              <div className="hidden sm:flex items-center gap-1.5 px-2 py-1.5 bg-gray-100 rounded-xl" title="Choose theme">
+                {([
+                  { key: 'default' as Theme, bg: '#1A1A2E', ring: '#D4C4A0', label: lang === 'fa' ? 'تم پیش‌فرض' : 'Default' },
+                  { key: 'pink'    as Theme, bg: '#4A1535', ring: '#CF9AAE', label: lang === 'fa' ? 'رز صورتی' : 'Pink Rose' },
+                  { key: 'purple'  as Theme, bg: '#1F0F40', ring: '#C4A0D4', label: lang === 'fa' ? 'بنفش' : 'Purple Bloom' },
+                ]).map(({ key, bg, ring, label }) => (
+                  <button
+                    key={key}
+                    title={label}
+                    onClick={() => setTheme(key)}
+                    className="relative w-5 h-5 rounded-full transition-transform hover:scale-110 focus:outline-none"
+                    style={{
+                      backgroundColor: bg,
+                      boxShadow: theme === key ? `0 0 0 2px white, 0 0 0 4px ${ring}` : undefined,
+                    }}
+                    aria-label={label}
+                  />
+                ))}
+              </div>
+
               <button
                 onClick={() => setLang(lang === 'fa' ? 'en' : 'fa')}
                 className="flex items-center gap-2 px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors"
@@ -373,8 +403,8 @@ function App() {
                           <Camera className="w-5 h-5 text-navy" />
                         </div>
                         <div>
-                          <span className="font-bold text-navy">BaharFilm</span>
-                          <p className="text-xs text-gray-500">{lang === 'fa' ? 'استودیو بهارفیلم' : 'BaharFilm Studio'}</p>
+                          <span className="font-bold text-navy">{lang === 'fa' ? 'آتلیه رز صورتی' : 'Pink Rose Studio'}</span>
+                          <p className="text-xs text-gray-500">{lang === 'fa' ? 'استودیو تخصصی عکاسی' : 'Pink Rose Studio'}</p>
                         </div>
                       </div>
                       <button onClick={() => setIsMenuOpen(false)} className="p-2 hover:bg-gray-100 rounded-lg">
@@ -448,7 +478,7 @@ function App() {
         <section id="home" className="px-4 py-8">
           <div className="max-w-6xl mx-auto">
             <div className="relative rounded-[2rem] overflow-hidden shadow-2xl mb-8 group">
-              <img src={content.hero.image} alt="BaharFilm Studio"
+              <img src={content.hero.image} alt="Pink Rose Studio"
                 className="w-full h-[400px] md:h-[500px] object-cover group-hover:scale-105 transition-transform duration-700" />
               <div className="absolute inset-0 bg-gradient-to-t from-navy/60 via-transparent to-transparent" />
               <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10">
@@ -621,8 +651,8 @@ function App() {
                 <Camera className="w-8 h-8 text-navy" />
               </div>
               <div className="text-left">
-                <h2 className="text-3xl font-bold text-navy">BaharFilm</h2>
-                <p className="text-gold-dark text-sm">{lang === 'fa' ? 'استودیو بهارفیلم' : 'BaharFilm Studio'}</p>
+                <h2 className="text-3xl font-bold text-navy">{lang === 'fa' ? 'آتلیه رز صورتی' : 'Pink Rose Studio'}</h2>
+                <p className="text-gold-dark text-sm">{lang === 'fa' ? 'استودیو تخصصی عکاسی' : 'Pink Rose Studio'}</p>
               </div>
             </div>
             <div className="bg-white rounded-[2rem] p-8 shadow-card">
