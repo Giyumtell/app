@@ -45,30 +45,30 @@ export interface SiteContent {
 
 const DEFAULT_CONTENT: SiteContent = {
   hero: {
-    image: '/images/hero-baby.jpg',
+    image: './images/hero-baby.jpg',
   },
   gallery: {
     pregnancy: [
-      { id: 1, src: '/images/pregnancy-1.jpg', alt: 'Pregnancy Photography', title: 'Maternity Portrait' },
-      { id: 2, src: '/images/pregnancy-2.jpg', alt: 'Pregnancy Photography', title: 'Elegant Maternity' },
+      { id: 1, src: './images/pregnancy-1.jpg', alt: 'Pregnancy Photography', title: 'Maternity Portrait' },
+      { id: 2, src: './images/pregnancy-2.jpg', alt: 'Pregnancy Photography', title: 'Elegant Maternity' },
     ],
     newborn: [
-      { id: 1, src: '/images/newborn-1.jpg', alt: 'Newborn Photography', title: 'Christmas Newborn' },
-      { id: 2, src: '/images/newborn-2.jpg', alt: 'Newborn Photography', title: 'Winter Wonderland' },
+      { id: 1, src: './images/newborn-1.jpg', alt: 'Newborn Photography', title: 'Christmas Newborn' },
+      { id: 2, src: './images/newborn-2.jpg', alt: 'Newborn Photography', title: 'Winter Wonderland' },
     ],
     child: [
-      { id: 1, src: '/images/child-1.jpg', alt: 'Child Photography', title: 'Birthday Celebration' },
-      { id: 2, src: '/images/child-2.jpg', alt: 'Child Photography', title: 'Outdoor Portrait' },
+      { id: 1, src: './images/child-1.jpg', alt: 'Child Photography', title: 'Birthday Celebration' },
+      { id: 2, src: './images/child-2.jpg', alt: 'Child Photography', title: 'Outdoor Portrait' },
     ],
     family: [
-      { id: 1, src: '/images/family-1.jpg', alt: 'Family Photography', title: 'Family Christmas' },
-      { id: 2, src: '/images/family-2.jpg', alt: 'Family Photography', title: 'Elegant Family' },
+      { id: 1, src: './images/family-1.jpg', alt: 'Family Photography', title: 'Family Christmas' },
+      { id: 2, src: './images/family-2.jpg', alt: 'Family Photography', title: 'Elegant Family' },
     ],
   },
   blog: [
     {
       id: 1,
-      image: '/images/blog-1.jpg',
+      image: './images/blog-1.jpg',
       title: 'لباس عکاسی نوزاد | راهنمای کامل انتخاب',
       titleEn: 'Newborn Photography Outfit | Complete Selection Guide',
       description: 'راهنمای کامل انتخاب لباس مناسب برای عکس نوزاد در آتلیه',
@@ -77,7 +77,7 @@ const DEFAULT_CONTENT: SiteContent = {
     },
     {
       id: 2,
-      image: '/images/blog-2.jpg',
+      image: './images/blog-2.jpg',
       title: 'عکس خانوادگی مانندکار',
       titleEn: 'Family Portrait Like a Pro',
       description: 'چگونه یک عکس خانوادگی مانندکار خلق کنیم؟',
@@ -86,7 +86,7 @@ const DEFAULT_CONTENT: SiteContent = {
     },
     {
       id: 3,
-      image: '/images/blog-3.jpg',
+      image: './images/blog-3.jpg',
       title: 'آماده سازی برای عکاسی نوزاد',
       titleEn: 'Preparing for Newborn Photography',
       description: 'راهنمای کامل والدین برای یک جلسه عکاسی ایده‌آل',
@@ -95,7 +95,7 @@ const DEFAULT_CONTENT: SiteContent = {
     },
     {
       id: 4,
-      image: '/images/blog-4.jpg',
+      image: './images/blog-4.jpg',
       title: 'ایده عکس خانوادگی | ایده‌های خلاقانه',
       titleEn: 'Family Photo Ideas | Creative Concepts',
       description: 'ایده‌های خلاقانه عکس‌های خانوادگی در آتلیه',

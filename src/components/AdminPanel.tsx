@@ -290,7 +290,7 @@ export function AdminPanel({ content, onContentChange, onClose }: Props) {
                   className={inp}
                   value={draft.hero.image}
                   onChange={(e) => updateHeroImage(e.target.value)}
-                  placeholder="/images/hero-baby.jpg or https://..."
+                  placeholder="./images/hero-baby.jpg or https://..."
                 />
                 {draft.hero.image && (
                   <div className="mt-3 rounded-xl overflow-hidden h-40 bg-gray-100">
@@ -364,7 +364,7 @@ export function AdminPanel({ content, onContentChange, onClose }: Props) {
                     className={inp}
                     value={newImgSrc}
                     onChange={(e) => setNewImgSrc(e.target.value)}
-                    placeholder="/images/photo.jpg or https://..."
+                    placeholder="./images/photo.jpg or https://..."
                   />
                 </div>
                 <div>
@@ -446,7 +446,7 @@ export function AdminPanel({ content, onContentChange, onClose }: Props) {
                       { key: 'title', label: 'Title (FA)', placeholder: 'عنوان فارسی' },
                       { key: 'descriptionEn', label: 'Description (EN)', placeholder: 'English description' },
                       { key: 'description', label: 'Description (FA)', placeholder: 'توضیح فارسی' },
-                      { key: 'image', label: 'Image URL', placeholder: '/images/blog.jpg' },
+                      { key: 'image', label: 'Image URL', placeholder: './images/blog.jpg' },
                       { key: 'date', label: 'Date', placeholder: '۱۴۰۳/۱۱/۱۵' },
                     ].map(({ key, label: lbl, placeholder }) => (
                       <div key={key}>
